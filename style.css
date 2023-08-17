@@ -43,7 +43,7 @@ a:focus {
 	outline: none;
 }
 
-a:active div {
+a:active button {
 	background-color: rgba(89, 98, 117, 1);
 	color: rgba(255, 255, 255, 1);
 }
@@ -105,9 +105,18 @@ a:active div {
 	border: 0.5px solid rgba(255, 255, 255, 0.2);
 	border-bottom: none;
 	box-shadow: 0 0.3rem 10rem rgba(0, 0, 0, 0.2);
+	background: inherit;
+	color: inherit;
+	cursor: pointer;
+	outline: none;
 }
 
-.calc__btn {
+.disabled {
+	cursor: not-allowed;
+}
+
+.disabled:active {
+	background-color: inherit;
 }
 
 .calc__btn--operator {

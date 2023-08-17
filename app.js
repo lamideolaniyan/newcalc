@@ -9,7 +9,10 @@ TO DO
 */
 
 const database = {};
-const getDOM = { btnArr: Array.from(document.querySelectorAll('.calc__btn')) };
+const getDOM = {
+	btnArr: Array.from(document.querySelectorAll('.calc__btn')),
+	numBtnArr: Array.from(document.querySelectorAll('.num-btn')),
+};
 let numStr = '';
 let calcArr = [];
 let result = 0;
@@ -22,14 +25,17 @@ const getUserInput = () => {
 				numStr += e.target.dataset.value;
 			} else if (e.target.dataset.value === '=') {
 				// DO CALCULATION
-				calcArr.push(numStr);
+				numStr ? calcArr.push(numStr) : false;
 				calcNum();
 				console.log(calcArr);
 
 				// RETURN RESULT
 				// STORE RESULT IN ARRAY
+
+				// DISABLE NUMBER BUTTONS
+				disableNum();
 			} else if (e.target.dataset.type === 'operator') {
-				calcArr.push(numStr);
+				numStr ? calcArr.push(numStr) : false;
 				calcArr.push(e.target.dataset.value);
 				numStr = '';
 				console.log(calcArr);
@@ -43,29 +49,36 @@ const calcNum = () => {
 		switch (curr) {
 			case '*':
 				result = acc * 1 * calcArr[ind + 1];
-				calcArr = [];
+				calcArr = [result];
 				numStr = '';
 				console.log(result);
 				break;
 			case '+':
 				result = acc * 1 + calcArr[ind + 1] * 1;
-				calcArr = [];
+				calcArr = [result];
 				numStr = '';
 				console.log(result);
 				break;
 			case '-':
 				result = acc * 1 - calcArr[ind + 1] * 1;
-				calcArr = [];
+				calcArr = [result];
 				numStr = '';
 				console.log(result);
 				break;
 			case '/':
 				result = (acc * 1) / (calcArr[ind + 1] * 1);
-				calcArr = [];
+				calcArr = [result];
 				numStr = '';
 				console.log(result);
 				break;
 		}
+	});
+};
+
+const disableNum = () => {
+	getDOM.numBtnArr.forEach((btn) => {
+		btn.classList.add('disabled');
+		btn.disabled = true;
 	});
 };
 getUserInput();
