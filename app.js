@@ -8,23 +8,34 @@ TO DO
 - Display information on screen
 */
 
-const database = {};
-const getDOM = {
-	btnArr: Array.from(document.querySelectorAll('.calc__btn')),
-	numBtnArr: Array.from(document.querySelectorAll('.num-btn')),
-};
 let numStr = '';
 let calcArr = [];
 let result = 0;
 
-let calcStr = '';
+const getDOM = {
+	btnArr: Array.from(document.querySelectorAll('.calc__btn')),
+	numBtnArr: Array.from(document.querySelectorAll('.num-btn')),
+};
+
 const getUserInput = () => {
+	/*
+	 ITERATE THROUGH EACH BUTTON, ADD AN EVENTLISTENER AND PERFORM AN ACTION BASED ON THE TYPE OF BUTTON
+	 - For numbers, get the value and store in a string
+	 - For operators aside '=', push the number string into an array, get the operator and push into the array
+	 - For '=', call a function to calculate the user input by joining the array into a string and using javascript eval function
+	 */
 	getDOM.btnArr.forEach((btn) => {
 		btn.addEventListener('click', (e) => {
 			if (e.target.dataset.type === 'num') {
-				numStr += e.target.dataset.value;
+				/* 
+				CHECK THE CALC ARRAY FOR LAST ELEMENT. 
+				- If it's a number, then it's the total from the previous calculation and DB will be reset 
+				- If it's a string, then it is part of the current calculation
+				*/
+				typeof calcArr[calcArr.length - 1] === 'number'
+					? (resetDB(), (numStr += e.target.dataset.value))
+					: (numStr += e.target.dataset.value);
 			} else if (e.target.dataset.value === '=') {
-				// DO CALCULATION
 				numStr ? calcArr.push(numStr) : false;
 				calcNum();
 				console.log(calcArr);
@@ -33,7 +44,8 @@ const getUserInput = () => {
 				// STORE RESULT IN ARRAY
 
 				// DISABLE NUMBER BUTTONS
-				disableNum();
+
+				// disableNum();
 			} else if (
 				e.target.dataset.type === 'operator' &&
 				e.target.dataset.value !== 'clear'
@@ -43,10 +55,8 @@ const getUserInput = () => {
 				numStr = '';
 				console.log(calcArr);
 			} else if (e.target.dataset.value === 'clear') {
-				numStr = '';
-				calcArr = [];
-				result = 0;
-				enableNum();
+				resetDB();
+				// enableNum();
 			}
 		});
 	});
@@ -71,5 +81,11 @@ const enableNum = () => {
 		btn.classList.remove('disabled');
 		btn.disabled = false;
 	});
+};
+
+const resetDB = () => {
+	numStr = '';
+	calcArr = [];
+	result = 0;
 };
 getUserInput();
