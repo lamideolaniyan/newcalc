@@ -34,51 +34,42 @@ const getUserInput = () => {
 
 				// DISABLE NUMBER BUTTONS
 				disableNum();
-			} else if (e.target.dataset.type === 'operator') {
+			} else if (
+				e.target.dataset.type === 'operator' &&
+				e.target.dataset.value !== 'clear'
+			) {
 				numStr ? calcArr.push(numStr) : false;
 				calcArr.push(e.target.dataset.value);
 				numStr = '';
 				console.log(calcArr);
+			} else if (e.target.dataset.value === 'clear') {
+				numStr = '';
+				calcArr = [];
+				result = 0;
+				enableNum();
 			}
 		});
 	});
 };
 
 const calcNum = () => {
-	result = calcArr.reduce((acc, curr, ind) => {
-		switch (curr) {
-			case '*':
-				result = acc * 1 * calcArr[ind + 1];
-				calcArr = [result];
-				numStr = '';
-				console.log(result);
-				break;
-			case '+':
-				result = acc * 1 + calcArr[ind + 1] * 1;
-				calcArr = [result];
-				numStr = '';
-				console.log(result);
-				break;
-			case '-':
-				result = acc * 1 - calcArr[ind + 1] * 1;
-				calcArr = [result];
-				numStr = '';
-				console.log(result);
-				break;
-			case '/':
-				result = (acc * 1) / (calcArr[ind + 1] * 1);
-				calcArr = [result];
-				numStr = '';
-				console.log(result);
-				break;
-		}
-	});
+	result = eval(calcArr.join(''));
+	calcArr = [result];
+	numStr = '';
+	console.log(result);
 };
 
 const disableNum = () => {
 	getDOM.numBtnArr.forEach((btn) => {
 		btn.classList.add('disabled');
 		btn.disabled = true;
+	});
+};
+
+const enableNum = () => {
+	getDOM.numBtnArr.forEach((btn) => {
+		btn.classList.remove('disabled');
+		btn.disabled = false;
 	});
 };
 getUserInput();
