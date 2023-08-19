@@ -8,13 +8,14 @@ TO DO
 - Display information on screen
 */
 
-let numStr = '';
 let calcArr = [];
 let result = 0;
 
 const getDOM = {
 	btnArr: Array.from(document.querySelectorAll('.calc__btn')),
 	numBtnArr: Array.from(document.querySelectorAll('.num-btn')),
+	screenTop: document.querySelector('.calc__screen--top'),
+	screenBottom: document.querySelector('.calc__screen--bottom'),
 };
 
 const getUserInput = () => {
@@ -33,30 +34,39 @@ const getUserInput = () => {
 				- If it's a string, then it is part of the current calculation
 				*/
 				typeof calcArr[calcArr.length - 1] === 'number'
-					? (resetDB(), (numStr += e.target.dataset.value))
-					: (numStr += e.target.dataset.value);
+					? (resetDB(),
+					  // TESTING
+					  //   (numStr += e.target.dataset.value),
+					  calcArr.push(`${e.target.dataset.value}`))
+					: // TESTING
+					  // (numStr += e.target.dataset.value),
+					  calcArr.push(`${e.target.dataset.value}`);
+
+				// RENDER DOM
+				renderDOM(e.target.dataset.value);
 			} else if (e.target.dataset.value === '=') {
-				numStr ? calcArr.push(numStr) : false;
+				// TESTING
+				// numStr ? calcArr.push(numStr) : false;
 				calcNum();
+
+				// RENDER DOM
+				renderDOM(e.target.dataset.value);
 				console.log(calcArr);
-
-				// RETURN RESULT
-				// STORE RESULT IN ARRAY
-
-				// DISABLE NUMBER BUTTONS
-
-				// disableNum();
 			} else if (
 				e.target.dataset.type === 'operator' &&
 				e.target.dataset.value !== 'clear'
 			) {
-				numStr ? calcArr.push(numStr) : false;
+				// numStr ? calcArr.push(numStr) : false;
 				calcArr.push(e.target.dataset.value);
 				numStr = '';
 				console.log(calcArr);
+
+				// RENDER DOM
+				renderDOM(e.target.dataset.value);
 			} else if (e.target.dataset.value === 'clear') {
 				resetDB();
-				// enableNum();
+				// RENDER DOM
+				renderDOM(e.target.dataset.value);
 			}
 		});
 	});
@@ -88,4 +98,12 @@ const resetDB = () => {
 	calcArr = [];
 	result = 0;
 };
+
+const renderDOM = (operator) => {
+	if (operator === '=') {
+		getDOM.screenBottom.textContent = calcArr[length - 1];
+	}
+	getDOM.screenTop.textContent = calcArr.join('');
+};
+
 getUserInput();
