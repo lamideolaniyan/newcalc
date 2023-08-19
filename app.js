@@ -10,6 +10,7 @@ TO DO
 
 let calcArr = [];
 let result = 0;
+let displayArr = [];
 
 const getDOM = {
 	btnArr: Array.from(document.querySelectorAll('.calc__btn')),
@@ -105,8 +106,11 @@ const renderDOM = (operator) => {
 	if (operator === '=') {
 		getDOM.screenBottom.textContent = calcArr[calcArr.length - 1];
 	}
-	const equation = calcArr.join('');
-	getDOM.screenTop.textContent = equation
+
+	displayArr = calcArr.filter((e) => typeof e !== 'number1');
+
+	getDOM.screenTop.textContent = displayArr
+		.join('')
 		.replaceAll('*', 'x')
 		.replaceAll('/', '÷')
 		.replaceAll('/100', '%');
