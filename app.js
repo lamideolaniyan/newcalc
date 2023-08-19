@@ -74,7 +74,9 @@ const getUserInput = () => {
 
 const calcNum = () => {
 	result = eval(calcArr.join(''));
-	calcArr = [result];
+	// TESTING
+	// calcArr = [result];
+	calcArr.push(result);
 	numStr = '';
 	console.log(result);
 };
@@ -101,7 +103,7 @@ const resetDB = () => {
 
 const renderDOM = (operator) => {
 	if (operator === '=') {
-		getDOM.screenBottom.textContent = calcArr[length - 1];
+		getDOM.screenBottom.textContent = calcArr[calcArr.length - 1];
 	}
 	getDOM.screenTop.textContent = calcArr.join('');
 };
