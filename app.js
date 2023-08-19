@@ -105,7 +105,11 @@ const renderDOM = (operator) => {
 	if (operator === '=') {
 		getDOM.screenBottom.textContent = calcArr[calcArr.length - 1];
 	}
-	getDOM.screenTop.textContent = calcArr.join('');
+	const equation = calcArr.join('');
+	getDOM.screenTop.textContent = equation
+		.replaceAll('*', 'x')
+		.replaceAll('/', '÷')
+		.replaceAll('/100', '%');
 };
 
 getUserInput();
