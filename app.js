@@ -59,7 +59,8 @@ const getUserInput = () => {
 				resetDB();
 				renderDOM(opValue, opType);
 			} else if (opValue === '±') {
-				calcArr[calcArr.length - 1] = -calcArr[calcArr.length - 1];
+				calcArr[calcArr.length - 1] = '' + -calcArr[calcArr.length - 1]; //string of negative last number
+				console.log(calcArr);
 				renderDOM(opValue, opType);
 			}
 		});
@@ -92,25 +93,25 @@ const resetDB = () => {
 	result = 0;
 };
 
-const renderDOM = (operator, opType) => {
+const renderDOM = (opValue, opType) => {
 	if (
 		opType === 'operator' &&
-		operator !== '=' &&
 		typeof calcArr[0] === 'number' &&
-		operator !== 'clear'
+		opValue !== '=' &&
+		opValue !== 'clear'
 	) {
 		calcArr[0] = '' + calcArr[0]; // CHANGE 'result' TO STRING, IT'S THE FIRST ELEMENT IN calcArr AFTER '=' IS CLICKED
 		getDOM.screenTop.textContent = replaceSign(calcArr);
 	} else if (
 		opType === 'num' ||
-		(opType === 'operator' && operator !== '=' && operator !== 'clear')
+		(opType === 'operator' && opValue !== '=' && opValue !== 'clear')
 	) {
 		displayArr = calcArr.filter((e) => typeof e !== 'number');
 		getDOM.screenTop.textContent = replaceSign(displayArr);
-	} else if (operator === '=') {
+	} else if (opValue === '=') {
 		getDOM.screenBottom.textContent = calcArr[calcArr.length - 1];
 		calcArr = [result];
-	} else if (operator === 'clear') {
+	} else if (opValue === 'clear') {
 		getDOM.screenBottom.textContent = '0';
 		getDOM.screenTop.textContent = '';
 	}
