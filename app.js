@@ -42,14 +42,20 @@ const getUserInput = () => {
 
 				renderDOM(opValue, opType);
 			} else if (opValue === '=') {
-				calcNum();
+				try {
+					calcNum();
+				} catch (e) {
+					console.log(e);
+					calcArr = ['Error'];
+				}
 
 				renderDOM(opValue, opType);
 				console.log(calcArr);
 			} else if (
 				opType === 'operator' &&
 				opValue !== 'clear' &&
-				opValue !== '±'
+				opValue !== '±' &&
+				opValue !== 'del'
 			) {
 				calcArr.push(opValue);
 				console.log(calcArr);
@@ -62,6 +68,10 @@ const getUserInput = () => {
 				calcArr[calcArr.length - 1] = '' + -calcArr[calcArr.length - 1]; //string of negative last number
 				console.log(calcArr);
 				renderDOM(opValue, opType);
+				opValue !== 'del';
+			} else if (opValue === 'del') {
+				calcArr.pop();
+				renderDOM(opValue, opType);
 			}
 		});
 	});
@@ -70,8 +80,12 @@ const getUserInput = () => {
 const calcNum = () => {
 	result = eval(calcArr.join(''));
 
-	calcArr.push(result);
-	console.log(result);
+	if (result === undefined || result === NaN || result === Infinity) {
+		calcArr = ['Error'];
+	} else {
+		calcArr.push(result);
+		console.log(result);
+	}
 };
 
 const disableNum = () => {
