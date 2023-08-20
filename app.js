@@ -98,25 +98,32 @@ const renderDOM = (operator, opType) => {
 	if (
 		opType === 'operator' &&
 		operator !== '=' &&
-		typeof calcArr[0] === 'number'
+		typeof calcArr[0] === 'number' &&
+		operator !== 'clear'
 	) {
+		// CHANGE 'result' TO STRING, IT'S THE FIRST ELEMENT IN calcArr AFTER '=' IS CLICKED
 		calcArr[0] = '' + calcArr[0];
-		getDOM.screenTop.textContent = calcArr
-			.join('')
-			.replaceAll('*', 'x')
-			.replaceAll('/', '÷')
-			.replaceAll('/100', '%');
-	} else if (opType === 'num' || (opType === 'operator' && operator !== '=')) {
+		getDOM.screenTop.textContent = replaceSign(calcArr);
+	} else if (
+		opType === 'num' ||
+		(opType === 'operator' && operator !== '=' && operator !== 'clear')
+	) {
 		displayArr = calcArr.filter((e) => typeof e !== 'number');
-		getDOM.screenTop.textContent = displayArr
-			.join('')
-			.replaceAll('*', 'x')
-			.replaceAll('/', '÷')
-			.replaceAll('/100', '%');
+		getDOM.screenTop.textContent = replaceSign(displayArr);
 	} else if (operator === '=') {
 		getDOM.screenBottom.textContent = calcArr[calcArr.length - 1];
 		calcArr = [result];
+	} else if (operator === 'clear') {
+		getDOM.screenBottom.textContent = '0';
+		getDOM.screenTop.textContent = '';
 	}
 };
+
+const replaceSign = (arr) =>
+	arr
+		.join('')
+		.replaceAll('*', 'x')
+		.replaceAll('/', '÷')
+		.replaceAll('/100', '%');
 
 getUserInput();
