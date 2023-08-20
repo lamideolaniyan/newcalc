@@ -28,41 +28,39 @@ const getUserInput = () => {
 	 */
 	getDOM.btnArr.forEach((btn) => {
 		btn.addEventListener('click', (e) => {
-			if (e.target.dataset.type === 'num') {
+			const opType = e.target.dataset.type;
+			const opValue = e.target.dataset.value;
+			if (opType === 'num') {
 				/* 
 				CHECK THE CALC ARRAY FOR LAST ELEMENT. 
 				- If it's a number, then it's the total from the previous calculation and DB will be reset 
 				- If it's a string, then it is part of the current calculation
 				*/
 				typeof calcArr[calcArr.length - 1] === 'number'
-					? (resetDB(),
-					  // TESTING
-					  calcArr.push(`${e.target.dataset.value}`))
-					: // TESTING
-					  calcArr.push(`${e.target.dataset.value}`);
+					? (resetDB(), calcArr.push(`${opValue}`))
+					: calcArr.push(`${opValue}`);
 
-				// RENDER DOM
-				renderDOM(e.target.dataset.value, e.target.dataset.type);
-			} else if (e.target.dataset.value === '=') {
-				// TESTING
+				renderDOM(opValue, opType);
+			} else if (opValue === '=') {
 				calcNum();
 
-				// RENDER DOM
-				renderDOM(e.target.dataset.value, e.target.dataset.type);
+				renderDOM(opValue, opType);
 				console.log(calcArr);
 			} else if (
-				e.target.dataset.type === 'operator' &&
-				e.target.dataset.value !== 'clear'
+				opType === 'operator' &&
+				opValue !== 'clear' &&
+				opValue !== '±'
 			) {
-				calcArr.push(e.target.dataset.value);
+				calcArr.push(opValue);
 				console.log(calcArr);
 
-				// RENDER DOM
-				renderDOM(e.target.dataset.value, e.target.dataset.type);
-			} else if (e.target.dataset.value === 'clear') {
+				renderDOM(opValue, opType);
+			} else if (opValue === 'clear') {
 				resetDB();
-				// RENDER DOM
-				renderDOM(e.target.dataset.value, e.target.dataset.type);
+				renderDOM(opValue, opType);
+			} else if (opValue === '±') {
+				calcArr[calcArr.length - 1] = -calcArr[calcArr.length - 1];
+				renderDOM(opValue, opType);
 			}
 		});
 	});
@@ -70,7 +68,7 @@ const getUserInput = () => {
 
 const calcNum = () => {
 	result = eval(calcArr.join(''));
-	// TESTING
+
 	calcArr.push(result);
 	console.log(result);
 };
@@ -101,8 +99,7 @@ const renderDOM = (operator, opType) => {
 		typeof calcArr[0] === 'number' &&
 		operator !== 'clear'
 	) {
-		// CHANGE 'result' TO STRING, IT'S THE FIRST ELEMENT IN calcArr AFTER '=' IS CLICKED
-		calcArr[0] = '' + calcArr[0];
+		calcArr[0] = '' + calcArr[0]; // CHANGE 'result' TO STRING, IT'S THE FIRST ELEMENT IN calcArr AFTER '=' IS CLICKED
 		getDOM.screenTop.textContent = replaceSign(calcArr);
 	} else if (
 		opType === 'num' ||
