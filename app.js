@@ -42,13 +42,13 @@ const getUserInput = () => {
 					  calcArr.push(`${e.target.dataset.value}`);
 
 				// RENDER DOM
-				renderDOM(e.target.dataset.value);
+				renderDOM(e.target.dataset.value, e.target.dataset.type);
 			} else if (e.target.dataset.value === '=') {
 				// TESTING
 				calcNum();
 
 				// RENDER DOM
-				renderDOM(e.target.dataset.value);
+				renderDOM(e.target.dataset.value, e.target.dataset.type);
 				console.log(calcArr);
 			} else if (
 				e.target.dataset.type === 'operator' &&
@@ -58,11 +58,11 @@ const getUserInput = () => {
 				console.log(calcArr);
 
 				// RENDER DOM
-				renderDOM(e.target.dataset.value);
+				renderDOM(e.target.dataset.value, e.target.dataset.type);
 			} else if (e.target.dataset.value === 'clear') {
 				resetDB();
 				// RENDER DOM
-				renderDOM(e.target.dataset.value);
+				renderDOM(e.target.dataset.value, e.target.dataset.type);
 			}
 		});
 	});
@@ -94,18 +94,29 @@ const resetDB = () => {
 	result = 0;
 };
 
-const renderDOM = (operator) => {
-	displayArr = calcArr.filter((e) => typeof e !== 'number');
-	getDOM.screenTop.textContent = displayArr
-		.join('')
-		.replaceAll('*', 'x')
-		.replaceAll('/', '÷')
-		.replaceAll('/100', '%');
-
-	operator === '='
-		? ((getDOM.screenBottom.textContent = calcArr[calcArr.length - 1]),
-		  (calcArr = [result]))
-		: false;
+const renderDOM = (operator, opType) => {
+	if (
+		opType === 'operator' &&
+		operator !== '=' &&
+		typeof calcArr[0] === 'number'
+	) {
+		calcArr[0] = '' + calcArr[0];
+		getDOM.screenTop.textContent = calcArr
+			.join('')
+			.replaceAll('*', 'x')
+			.replaceAll('/', '÷')
+			.replaceAll('/100', '%');
+	} else if (opType === 'num' || (opType === 'operator' && operator !== '=')) {
+		displayArr = calcArr.filter((e) => typeof e !== 'number');
+		getDOM.screenTop.textContent = displayArr
+			.join('')
+			.replaceAll('*', 'x')
+			.replaceAll('/', '÷')
+			.replaceAll('/100', '%');
+	} else if (operator === '=') {
+		getDOM.screenBottom.textContent = calcArr[calcArr.length - 1];
+		calcArr = [result];
+	}
 };
 
 getUserInput();
