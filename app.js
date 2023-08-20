@@ -37,17 +37,14 @@ const getUserInput = () => {
 				typeof calcArr[calcArr.length - 1] === 'number'
 					? (resetDB(),
 					  // TESTING
-					  //   (numStr += e.target.dataset.value),
 					  calcArr.push(`${e.target.dataset.value}`))
 					: // TESTING
-					  // (numStr += e.target.dataset.value),
 					  calcArr.push(`${e.target.dataset.value}`);
 
 				// RENDER DOM
 				renderDOM(e.target.dataset.value);
 			} else if (e.target.dataset.value === '=') {
 				// TESTING
-				// numStr ? calcArr.push(numStr) : false;
 				calcNum();
 
 				// RENDER DOM
@@ -57,9 +54,7 @@ const getUserInput = () => {
 				e.target.dataset.type === 'operator' &&
 				e.target.dataset.value !== 'clear'
 			) {
-				// numStr ? calcArr.push(numStr) : false;
 				calcArr.push(e.target.dataset.value);
-				numStr = '';
 				console.log(calcArr);
 
 				// RENDER DOM
@@ -76,9 +71,7 @@ const getUserInput = () => {
 const calcNum = () => {
 	result = eval(calcArr.join(''));
 	// TESTING
-	// calcArr = [result];
 	calcArr.push(result);
-	numStr = '';
 	console.log(result);
 };
 
@@ -97,23 +90,22 @@ const enableNum = () => {
 };
 
 const resetDB = () => {
-	numStr = '';
 	calcArr = [];
 	result = 0;
 };
 
 const renderDOM = (operator) => {
-	if (operator === '=') {
-		getDOM.screenBottom.textContent = calcArr[calcArr.length - 1];
-	}
-
-	displayArr = calcArr.filter((e) => typeof e !== 'number1');
-
+	displayArr = calcArr.filter((e) => typeof e !== 'number');
 	getDOM.screenTop.textContent = displayArr
 		.join('')
 		.replaceAll('*', 'x')
 		.replaceAll('/', '÷')
 		.replaceAll('/100', '%');
+
+	operator === '='
+		? ((getDOM.screenBottom.textContent = calcArr[calcArr.length - 1]),
+		  (calcArr = [result]))
+		: false;
 };
 
 getUserInput();
