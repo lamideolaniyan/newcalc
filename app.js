@@ -30,18 +30,37 @@ const getUserInput = () => {
 		btn.addEventListener('click', (e) => {
 			const opType = e.target.dataset.type;
 			const opValue = e.target.dataset.value;
-			if (opType === 'num') {
-				/* 
+
+			if (calcArr.length <= 25) {
+				if (opType === 'num') {
+					/* 
 				CHECK THE CALC ARRAY FOR LAST ELEMENT. 
 				- If it's a number, then it's the total from the previous calculation and DB will be reset 
 				- If it's a string, then it is part of the current calculation
 				*/
-				typeof calcArr[calcArr.length - 1] === 'number'
-					? (resetDB(), calcArr.push(`${opValue}`))
-					: calcArr.push(`${opValue}`);
+					typeof calcArr[calcArr.length - 1] === 'number'
+						? (resetDB(), calcArr.push(`${opValue}`))
+						: calcArr.push(`${opValue}`);
 
-				renderDOM(opValue, opType);
-			} else if (opValue === '=') {
+					renderDOM(opValue, opType);
+				} else if (
+					opType === 'operator' &&
+					opValue !== 'clear' &&
+					opValue !== '±' &&
+					opValue !== 'del' &&
+					opValue !== '='
+				) {
+					calcArr.push(opValue);
+					console.log(calcArr);
+
+					renderDOM(opValue, opType);
+				} else if (opValue === '±') {
+					calcArr[calcArr.length - 1] = '' + -calcArr[calcArr.length - 1]; //string of negative last number
+					console.log(calcArr);
+					renderDOM(opValue, opType);
+				}
+			}
+			if (opValue === '=') {
 				try {
 					calcNum();
 				} catch (e) {
@@ -51,24 +70,9 @@ const getUserInput = () => {
 
 				renderDOM(opValue, opType);
 				console.log(calcArr);
-			} else if (
-				opType === 'operator' &&
-				opValue !== 'clear' &&
-				opValue !== '±' &&
-				opValue !== 'del'
-			) {
-				calcArr.push(opValue);
-				console.log(calcArr);
-
-				renderDOM(opValue, opType);
 			} else if (opValue === 'clear') {
 				resetDB();
 				renderDOM(opValue, opType);
-			} else if (opValue === '±') {
-				calcArr[calcArr.length - 1] = '' + -calcArr[calcArr.length - 1]; //string of negative last number
-				console.log(calcArr);
-				renderDOM(opValue, opType);
-				opValue !== 'del';
 			} else if (opValue === 'del') {
 				calcArr.pop();
 				renderDOM(opValue, opType);
@@ -123,7 +127,13 @@ const renderDOM = (opValue, opType) => {
 		displayArr = calcArr.filter((e) => typeof e !== 'number');
 		getDOM.screenTop.textContent = replaceSign(displayArr);
 	} else if (opValue === '=') {
-		getDOM.screenBottom.textContent = calcArr[calcArr.length - 1];
+		let resultStr = calcArr[calcArr.length - 1].toString();
+		console.log(resultStr.length);
+		resultStr.length >= 17
+			? ((getDOM.screenBottom.textContent =
+					calcArr[calcArr.length - 1].toExponential()),
+			  console.log(calcArr[calcArr.length - 1].toExponential()))
+			: (getDOM.screenBottom.textContent = calcArr[calcArr.length - 1]);
 		calcArr = [result];
 	} else if (opValue === 'clear') {
 		getDOM.screenBottom.textContent = '0';
