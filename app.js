@@ -1,13 +1,3 @@
-/**
-TO DO
-- Get user selection
-- Store selection
-- Get user operation
-- Compute user operation
-- Get and store total score
-- Display information on screen
-*/
-
 let calcArr = [];
 let result = 0;
 let displayArr = [];
@@ -31,6 +21,7 @@ const getUserInput = () => {
 			const opType = e.target.dataset.type;
 			const opValue = e.target.dataset.value;
 
+			// TO LIMIT USER INPUT LENGTH
 			if (calcArr.length <= 25) {
 				if (opType === 'num') {
 					/* 
@@ -51,12 +42,9 @@ const getUserInput = () => {
 					opValue !== '='
 				) {
 					calcArr.push(opValue);
-					console.log(calcArr);
-
 					renderDOM(opValue, opType);
 				} else if (opValue === '±') {
 					calcArr[calcArr.length - 1] = '' + -calcArr[calcArr.length - 1]; //string of negative last number
-					console.log(calcArr);
 					renderDOM(opValue, opType);
 				}
 			}
@@ -67,9 +55,7 @@ const getUserInput = () => {
 					console.log(e);
 					calcArr = ['Error'];
 				}
-
 				renderDOM(opValue, opType);
-				console.log(calcArr);
 			} else if (opValue === 'clear') {
 				resetDB();
 				renderDOM(opValue, opType);
@@ -88,10 +74,10 @@ const calcNum = () => {
 		calcArr = ['Error'];
 	} else {
 		calcArr.push(result);
-		console.log(result);
 	}
 };
 
+/*
 const disableNum = () => {
 	getDOM.numBtnArr.forEach((btn) => {
 		btn.classList.add('disabled');
@@ -105,6 +91,7 @@ const enableNum = () => {
 		btn.disabled = false;
 	});
 };
+*/
 
 const resetDB = () => {
 	calcArr = [];
@@ -128,11 +115,9 @@ const renderDOM = (opValue, opType) => {
 		getDOM.screenTop.textContent = replaceSign(displayArr);
 	} else if (opValue === '=') {
 		let resultStr = calcArr[calcArr.length - 1].toString();
-		console.log(resultStr.length);
 		resultStr.length >= 17
-			? ((getDOM.screenBottom.textContent =
-					calcArr[calcArr.length - 1].toExponential()),
-			  console.log(calcArr[calcArr.length - 1].toExponential()))
+			? (getDOM.screenBottom.textContent =
+					calcArr[calcArr.length - 1].toExponential())
 			: (getDOM.screenBottom.textContent = calcArr[calcArr.length - 1]);
 		calcArr = [result];
 	} else if (opValue === 'clear') {
